@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const signInRouter = require("./routes/signIn.route");
 const logInRouter = require("./routes/logIn.route");
 const accountRouter = require("./routes/accounts.route");
+const transferRouter = require("./routes/transfer.route");
+
 
 const errorHandler = require("./middleware/error.middleware.js");
 
@@ -24,7 +26,9 @@ app.use(cookieParser());
 
 app.use("/signin", signInRouter);
 app.use("/login", logInRouter);
-app.use("/accounts", accountRouter); //needs log middleware
+app.use("/accounts", accountRouter); 
+app.use("/transfer", transferRouter) //needs middleware to validate integrity
+
 
 app.use(errorHandler);
 
