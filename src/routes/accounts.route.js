@@ -4,7 +4,8 @@ const authenticateJWT = require("../middleware/jwt.middleware");
 
 const accountRouter = express.Router();
 
-accountRouter.route("/").get(authenticateJWT, async (req, res, next) => {
+accountRouter.route("/")
+.get(authenticateJWT, async (req, res, next) => {
   try {
     const response = await AccountService.getAccounts(req.user);
     res.status(200).json({
@@ -15,5 +16,6 @@ accountRouter.route("/").get(authenticateJWT, async (req, res, next) => {
     next(error);
   }
 });
+
 
 module.exports = accountRouter;

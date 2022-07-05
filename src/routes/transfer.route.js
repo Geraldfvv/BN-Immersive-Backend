@@ -22,4 +22,25 @@ transferRouter.route("/").post(async (req, res, next) => {
   }
 });
 
+transferRouter
+  .route("/history")
+  .get(authenticateJWT, async (req, res, next) => {
+    try {
+      const { account, startDate, endDate, offset, quantity } = req.body;
+      const response = await TransferService.getTransfers(
+        account,
+        startDate,
+        endDate,
+        offset,
+        quantity
+      );
+      res.status(200).json({
+        status: 200,
+        data: response,
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+
 module.exports = transferRouter;

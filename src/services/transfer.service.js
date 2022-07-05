@@ -50,6 +50,23 @@ class TransferService {
       throwError(404, "Account not found");
     }
   }
+
+  static async getTransfers(account, startDate, endDate, offset, quantity) {
+    const transfers = await Transactions
+    .where("date", ">", startDate)
+    .where("date", "<",endDate)
+    .where("origin", "==" , account )
+    .where("destiny","==", account)
+    .startAt(offset)
+    .limit(quantity)
+
+    let transferList = []
+    transfers.docs.forEach((doc) => {
+      transferList.push(doc.data());
+    });
+
+    return transferList
+  }
 }
 
 module.exports = TransferService;

@@ -28,7 +28,9 @@ class AccountService {
 
       const response = [];
       accounts.docs.forEach((doc) => {
-        response.push(doc.data());
+        let account = doc.data();
+        account.id = doc.id;
+        response.push(account);
       });
 
       return response;
@@ -36,6 +38,7 @@ class AccountService {
       throwError(500, "Database error");
     }
   }
+
 }
 
 module.exports = AccountService;
