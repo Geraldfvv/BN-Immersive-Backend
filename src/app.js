@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: ["https://bn-immersive.herokuapp.com", "http://localhost:3000"],
+    origin: ["http://localhost:3000","https://bn-immersive.herokuapp.com/"],
     credentials: true,
   })
 );

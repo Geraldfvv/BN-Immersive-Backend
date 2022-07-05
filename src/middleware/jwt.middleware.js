@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 
 authenticateJWT = (req, res, next) => {
   const authCookies = req.cookies.user;
-  console.log(req.cookies)
   if (authCookies) {
     try {
       const decoded = jwt.verify(authCookies, "my-ultra-secure-key");
