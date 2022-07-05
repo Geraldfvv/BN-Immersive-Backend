@@ -11,8 +11,8 @@ const ibanGenerator = (code) => {
 
 class AccountService {
   static async addAccount(data) {
-    const { owner, currency, balance , code} = data;
-    const iban = ibanGenerator(code)
+    const { owner, currency, balance, code } = data;
+    const iban = ibanGenerator(code);
     await Accounts.add({ owner, currency, balance, iban })
       .then(() => {
         return;
@@ -20,6 +20,21 @@ class AccountService {
       .catch(() => {
         throwError(500, "Database error");
       });
+  }
+
+  static async getAccounts(user) {
+    try {
+      const accounts = await Accounts.where("owner", "==", user).get();
+
+      const response = [];
+      accounts.docs.forEach((doc) => {
+        response.push(doc.data());
+      });
+
+      return response;
+    } catch (err) {
+      throwError(500, "Database error");
+    }
   }
 }
 

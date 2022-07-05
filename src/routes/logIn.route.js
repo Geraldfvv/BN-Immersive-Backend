@@ -6,11 +6,11 @@ logInRouter.route("/").post(async (req, res, next) => {
   const data = req.body;
 
   try {
-    const response = await LogInService.logIn(data);
+    const result = await LogInService.logIn(data);
     res.status(200).json({
       message: "Logged in successfully",
       status: 200,
-      token: response,
+      data: result,
     });
   } catch (error) {
     next(error);
