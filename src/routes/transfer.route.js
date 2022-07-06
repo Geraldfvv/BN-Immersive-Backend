@@ -26,13 +26,18 @@ transferRouter
   .route("/history")
   .get(authenticateJWT, async (req, res, next) => {
     try {
-      const { account, startDate, endDate, offset, quantity } = req.body;
+      const account = req.query.account;
+      const startDate = req.query.startDate;
+      const endDate = req.query.endDate;
+      const offset = (+req.query.offset);
+      const limit = (+req.query.limit);
+
       const response = await TransferService.getTransfers(
         account,
         startDate,
         endDate,
         offset,
-        quantity
+        limit
       );
       res.status(200).json({
         status: 200,

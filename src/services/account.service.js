@@ -39,6 +39,14 @@ class AccountService {
     }
   }
 
+  static async getAccountById(id) {
+    try {
+      const account = await Accounts.doc(id).get()
+      return (account.data())
+    } catch (err) {
+      throwError(500, "Database error");
+    }
+  }
 }
 
 module.exports = AccountService;
