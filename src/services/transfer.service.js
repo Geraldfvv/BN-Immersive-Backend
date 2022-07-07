@@ -86,21 +86,20 @@ class TransferService {
       .orderBy("date", "desc")
       .get();
 
-    let debits = [];
+    let transfers = [];
     originTransfers.docs.forEach((doc) => {
       let transaction = doc.data();
       transaction.id = doc.id;
-      debits.push({ ...transaction, date: transaction.date.toDate() });
+      transfers.push({ ...transaction, date: transaction.date.toDate() });
     });
-    let credits = [];
     destinyTransfers.docs.forEach((doc) => {
       let transaction = doc.data();
       transaction.id = doc.id;
-      credits.push({ ...transaction, date: transaction.date.toDate() });
+      transfers.push({ ...transaction, date: transaction.date.toDate() });
     });
 
     return {
-      transfers: { debits: debits, credits: credits },
+      transfers: transfers,
       account: await AccountService.getAccountById(account),
     };
   }

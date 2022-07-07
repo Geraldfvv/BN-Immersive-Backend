@@ -1,16 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 
 const signInRouter = require("./routes/signIn.route");
 const logInRouter = require("./routes/logIn.route");
 const accountRouter = require("./routes/accounts.route");
 const transferRouter = require("./routes/transfer.route");
 
-
 const errorHandler = require("./middleware/error.middleware.js");
 
 const app = express();
+app.use(fileUpload());
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,13 +24,11 @@ app.use(
   })
 );
 
-app.use(cookieParser());
-
+app.use("/upload", signInRouter);
 app.use("/signin", signInRouter);
 app.use("/login", logInRouter);
-app.use("/accounts", accountRouter); 
-app.use("/transfer", transferRouter) //needs middleware to validate integrity
-
+app.use("/accounts", accountRouter);
+app.use("/transfer", transferRouter);
 
 app.use(errorHandler);
 
