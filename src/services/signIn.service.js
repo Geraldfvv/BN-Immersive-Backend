@@ -1,5 +1,6 @@
 const throwError = require("../helpers/error.helper");
 const AccountService = require("../services/account.service");
+const ServicesService = require("../services/services.service");
 const admin = require("firebase-admin");
 const { db } = require("../config/connection.config");
 const Users = db.collection("Users");
@@ -24,6 +25,7 @@ class SignInService {
           code: "US",
         };
         AccountService.addAccount(accountUSD);
+        ServicesService.generateBills(id)
       })
       .catch(() => {
         throwError(500, "Database error");

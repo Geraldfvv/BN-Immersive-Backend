@@ -16,6 +16,7 @@ signInRouter.route("/").post(signInValidate, async (req, res, next) => {
 
 signInRouter.route("/upload").post(async (req, res, next) => {
   const image = req.files.image.data;
+  console.log(req.body.name)
   try {
     const url = await SignInService.uploadImage(image);
     res.status(200).json({ url: url, status: 200 });

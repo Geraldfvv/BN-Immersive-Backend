@@ -17,28 +17,29 @@ class TransferService {
     if (!originAcc.empty) {
       auxOrigin = originAcc.docs[0];
       //Checks if origin has enough funds
-      if (auxOrigin.data().balance > amount) {
-        //Checks if destiny exists
-        if (!destinyAcc.empty) {
-          auxDestiny = destinyAcc.docs[0];
-
-          //Checks if accounts are of the same currency
-          if (auxDestiny.data().currency === auxOrigin.data().currency) {
+      if (auxOrigin.data().balance >= parseInt(amount)) {
+        //Checks if accounts are of the same currency
+        if (origin.substring(0, 2) === destiny.substring(0, 2)) {
+          //Checks if destiny exists
+          if (!destinyAcc.empty) {
+            auxDestiny = destinyAcc.docs[0];
             //Adds amount to the account
             await Accounts.doc(auxDestiny.id).update({
-              balance: auxDestiny.data().balance + amount,
+              balance: auxDestiny.data().balance + parseInt(amount),
             });
-          } else {
-            throwError(
-              500,
-              "You can only make transfers between accounts of the same currency"
-            );
           }
+        } else {
+          throwError(
+            400,
+            JSON.stringify({
+              destiny: "Different currency between accounts!",
+            })
+          );
         }
 
         //Discounds amount to the account
         await Accounts.doc(auxOrigin.id).update({
-          balance: auxOrigin.data().balance - amount,
+          balance: auxOrigin.data().balance - parseInt(amount),
         });
 
         const currency = auxOrigin
@@ -62,10 +63,50 @@ class TransferService {
           return;
         });
       } else {
-        throwError(500, "Not enough funds");
+        throwError(400, JSON.stringify({ amount: "Not enough funds" }));
       }
     } else {
-      throwError(404, "Account not found");
+      //Checks if destiny exists
+      if (!destinyAcc.empty) {
+        auxDestiny = destinyAcc.docs[0];
+
+        if (origin.substring(0, 2) === destiny.substring(0, 2)) {
+          //Adds amount to the account
+          await Accounts.doc(auxDestiny.id).update({
+            balance: auxDestiny.data().balance + parseInt(amount),
+          });
+        } else {
+          throwError(
+            400,
+            JSON.stringify({
+              destiny: "Different currency between accounts!",
+            })
+          );
+        }
+
+        const currency = auxOrigin
+          ? auxOrigin.data().currency
+          : auxDestiny.data().currency;
+
+        const idOrigin = auxOrigin ? auxOrigin.id : null;
+        const idDestiny = auxDestiny ? auxDestiny.id : null;
+
+        const date = new Date();
+        await Transactions.add({
+          origin,
+          idOrigin,
+          destiny,
+          idDestiny,
+          amount,
+          detail,
+          date,
+          currency,
+        }).then(() => {
+          return;
+        });
+      } else {
+        throwError(404, JSON.stringify({ destiny: "Account not found" }));
+      }
     }
   }
 

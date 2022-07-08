@@ -4,7 +4,7 @@ const authenticateJWT = require("../middleware/jwt.middleware");
 
 const transferRouter = express.Router();
 
-transferRouter.route("/").post(async (req, res, next) => {
+transferRouter.route("/").post(authenticateJWT, async (req, res, next) => {
   try {
     const { origin, destiny, amount, detail } = req.body;
     const response = await TransferService.transferMoney(
@@ -29,8 +29,8 @@ transferRouter
       const account = req.query.account;
       const startDate = req.query.startDate;
       const endDate = req.query.endDate;
-      const offset = (+req.query.offset);
-      const limit = (+req.query.limit);
+      const offset = +req.query.offset;
+      const limit = +req.query.limit;
 
       const response = await TransferService.getTransfers(
         account,
