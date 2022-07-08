@@ -8,7 +8,7 @@ const logInRouter = require("./routes/logIn.route");
 const accountRouter = require("./routes/accounts.route");
 const transferRouter = require("./routes/transfer.route");
 const serviceRouter = require("./routes/services.route");
-
+const userRouter = require("./routes/user.route");
 
 const errorHandler = require("./middleware/error.middleware.js");
 
@@ -26,12 +26,12 @@ app.use(
   })
 );
 
-app.use("/upload", signInRouter);
 app.use("/signin", signInRouter);
 app.use("/login", logInRouter);
 app.use("/accounts", accountRouter);
 app.use("/transfer", transferRouter);
-app.use("/services",serviceRouter)
+app.use("/services", serviceRouter);
+app.use("/user", userRouter);
 
 app.use(errorHandler);
 

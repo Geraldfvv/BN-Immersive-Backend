@@ -51,11 +51,6 @@ signInValidate = async (req, res, next) => {
     errors.fullName = "Email is required!";
   }
 
-  //ID Photo required
-  if (!idPhoto) {
-    errors.idPhoto = "ID Photo is required!";
-  }
-
   //Password 8 char long , one number , min and mayus , encrypted
   if (!password) {
     errors.idPhoto = "Password is required!";

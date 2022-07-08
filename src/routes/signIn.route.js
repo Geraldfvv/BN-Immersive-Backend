@@ -4,22 +4,14 @@ const SignInService = require("../services/signIn.service");
 const signInRouter = express.Router();
 
 signInRouter.route("/").post(signInValidate, async (req, res, next) => {
+
+  const image = req.files.idPhoto.data;
   const data = req.body;
 
   try {
-    await SignInService.addUser(data);
-    res.status(200).json({ message: "Signed in successfully", status: 200 });
-  } catch (error) {
-    throwError(500, "Server error");
-  }
-});
-
-signInRouter.route("/upload").post(async (req, res, next) => {
-  const image = req.files.image.data;
-  console.log(req.body.name)
-  try {
     const url = await SignInService.uploadImage(image);
-    res.status(200).json({ url: url, status: 200 });
+    await SignInService.addUser({ ...data, idPhoto: url });
+    res.status(200).json({ message: "Signed in successfully", status: 200 });
   } catch (error) {
     throwError(500, "Server error");
   }
